@@ -23,6 +23,6 @@ public class EnemyScript : MonoBehaviour {
 
     public void Hit()
     {
-        
+        gameController.DestroyEnemy(gameObject);
     }
 }
