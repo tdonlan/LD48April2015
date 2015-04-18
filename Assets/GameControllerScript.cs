@@ -7,9 +7,11 @@ public class GameControllerScript : MonoBehaviour {
 
     public GameObject player;
     public List<GameObject> enemyList;
+    public List<GameObject> bulletList;
     public System.Random r;
 
     public GameObject enemyPrefab;
+    public GameObject bulletPrefab;
 
 	// Use this for initialization
 	void Start () {
@@ -17,6 +19,7 @@ public class GameControllerScript : MonoBehaviour {
         
         
         enemyList = new List<GameObject>();
+        bulletList = new List<GameObject>();
 
         InitGameObjects();
         InitPrefabs();
@@ -31,6 +34,7 @@ public class GameControllerScript : MonoBehaviour {
     private void InitPrefabs()
     {
         enemyPrefab = Resources.Load<GameObject>("EnemyPrefab");
+        bulletPrefab = Resources.Load<GameObject>("BulletPrefab");
     }
 
     private void LoadEnemy()
@@ -45,6 +49,18 @@ public class GameControllerScript : MonoBehaviour {
         enemyList.Add(enemyObj);
     }
 
+    private void LoadBullet(Vector3 pos, Vector3 dest)
+    {
+        GameObject bulletObj = (GameObject)Instantiate(bulletPrefab);
+        var bulletScript = bulletObj.GetComponent<BulletScript>();
+        bulletScript.Velocity = dest;
+        bulletObj.transform.position = pos;
+            
+
+
+        bulletList.Add(bulletObj);
+    }
+
 	
 	// Update is called once per frame
 	void Update () {
@@ -53,4 +69,19 @@ public class GameControllerScript : MonoBehaviour {
             LoadEnemy();
         }
 	}
+
+    public void Shoot(Vector3 pos, Vector3 dest)
+    {
+        LoadBullet(pos,dest);
+    }
+
+    public void DestroyEnemy(GameObject enemy)
+    {
+        enemyList.Remove(enemy);
+    }
+
+    public void DestroyBullet(GameObject bullet)
+    {
+        bulletList.Remove(bullet);
+    }
 }

@@ -18,6 +18,11 @@ public class EnemyScript : MonoBehaviour {
 	void Update () {
 	    //chase player
         
-        gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, gameController.player.transform.position,.1f);
+        gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, gameController.player.transform.position,GameConfig.EnemySpeed);
 	}
+
+    public void Hit()
+    {
+        
+    }
 }
