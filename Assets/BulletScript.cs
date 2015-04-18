@@ -29,22 +29,42 @@ public class BulletScript : MonoBehaviour {
 
         gameObject.transform.position = new Vector3(curPos.x + (Velocity.x * Time.deltaTime * GameConfig.BulletSpeed), curPos.y + (Velocity.y * Time.deltaTime * GameConfig.BulletSpeed));
 
-        //CheckEnemyCollision();
-
+        CheckOffscreen();
+            
            
 	}
 
-    private void CheckEnemyCollision()
+    public void CheckOffscreen()
     {
-        foreach(var enemy in gameController.enemyList)
+        var curPos = gameObject.transform.position;
+        if(curPos.x > 1000 || curPos.x < -1000 || curPos.y > 1000 || curPos.y < -1000)
         {
-            var enemyCollider = enemy.GetComponent<BoxCollider2D>();
-            if(enemyCollider.IsTouching(bulletCollider))
-            {
-                var enemyScript = enemy.GetComponent<EnemyScript>();
-                enemyScript.Hit();
-                gameController.DestroyBullet(gameObject);
-            }
+            gameController.DestroyBullet(gameObject);
         }
     }
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log("Bullet HIt: " + other.gameObject.name);
+       
+
+        switch(other.gameObject.name)
+        {
+            case "EnemySprite":
+                var enemyScript = other.gameObject.GetComponent<EnemyScript>();
+                enemyScript.Hit();
+                gameController.DestroyBullet(gameObject);
+                break;
+            case "PlayerSprite":
+                    break;
+            default:
+                    
+                    break;
+
+        }
+
+
+    }
+
+ 
 }

@@ -25,4 +25,10 @@ public class EnemyScript : MonoBehaviour {
     {
         gameController.DestroyEnemy(gameObject);
     }
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log("Enemy HIt");
+        int i = 0;
+    }
 }
