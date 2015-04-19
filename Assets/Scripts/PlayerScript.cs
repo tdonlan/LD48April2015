@@ -10,6 +10,9 @@ public class PlayerScript : MonoBehaviour {
  
     Camera mainCamera;
 
+    public int maxHP { get; set; }
+    public int HP { get; set; }
+
 	// Use this for initialization
 	void Start () {
         this.gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControllerScript>();
@@ -65,5 +68,26 @@ public class PlayerScript : MonoBehaviour {
     {
         dest = Vector3.Normalize(dest);
         gameController.Shoot(gameObject.transform.position, dest);
+    }
+
+    public void Hit(int dmg)
+    {
+        this.HP -= dmg;
+        if(this.HP <=0)
+        {
+            Die();
+        }
+    }
+
+    public void Heal(int amt)
+    {
+        this.HP += amt;
+        if(this.HP > this.maxHP)
+        { this.HP = this.maxHP; }
+    }
+
+    public void Die()
+    {
+        gameController.GameOver();
     }
 }

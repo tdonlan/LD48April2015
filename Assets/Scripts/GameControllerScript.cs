@@ -88,4 +88,9 @@ public class GameControllerScript : MonoBehaviour {
         Destroy(bullet);
         bulletList.Remove(bullet);
     }
+
+    public void GameOver()
+    {
+
+    }
 }
