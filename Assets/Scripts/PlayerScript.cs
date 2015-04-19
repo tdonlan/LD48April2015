@@ -34,7 +34,7 @@ public class PlayerScript : MonoBehaviour {
 	void Update () {
 
         
-        HandleInput();
+        HandleInput(Time.deltaTime);
         UpdateCamera();
         UpdateDebug();
         UpdateHealthSlider();
@@ -43,7 +43,7 @@ public class PlayerScript : MonoBehaviour {
 
     public void UpdateDebug()
     {
-        debugText.text = string.Format("{0}, {1}", gameObject.transform.position.x, gameObject.transform.position.y); 
+       // debugText.text = string.Format("{0}, {1}", gameObject.transform.position.x, gameObject.transform.position.y); 
     }
 
     public void UpdateHealthSlider()
@@ -51,10 +51,10 @@ public class PlayerScript : MonoBehaviour {
         healthSlider.value = (float)HP / (float)maxHP;
     }
 
-    private void HandleInput()
+    private void HandleInput(float delta)
     {
-        var x = Input.GetAxis("Horizontal") * GameConfig.PlayerSpeed;
-        var y = Input.GetAxis("Vertical") * GameConfig.PlayerSpeed;
+        var x = Input.GetAxis("Horizontal") * GameConfig.PlayerSpeed * delta;
+        var y = Input.GetAxis("Vertical") * GameConfig.PlayerSpeed * delta;
 
         var curPos = gameObject.transform.position;
 
@@ -80,7 +80,8 @@ public class PlayerScript : MonoBehaviour {
     public void Shoot(Vector3 dest)
     {
         dest = Vector3.Normalize(dest);
-        gameController.Shoot(gameObject.transform.position, dest);
+        //gameController.Shoot(gameObject.transform.position, dest);
+        gameController.ShootHarpoon(gameObject.transform.position, dest);
     }
 
     public void Hit(int dmg)

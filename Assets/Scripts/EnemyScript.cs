@@ -18,7 +18,7 @@ public class EnemyScript : MonoBehaviour {
 	void Update () {
 	    //chase player
         
-        gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, gameController.player.transform.position,GameConfig.EnemySpeed);
+        gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, gameController.player.transform.position,GameConfig.EnemySpeed * Time.deltaTime);
 	}
 
     public void Hit()
