@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
+
 
 public class PlayerScript : MonoBehaviour {
 
     GameControllerScript gameController;
+    Text debugText;
  
     Camera mainCamera;
 
@@ -12,6 +15,7 @@ public class PlayerScript : MonoBehaviour {
         this.gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControllerScript>();
 
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        debugText = GameObject.FindGameObjectWithTag("DebugText").GetComponent<Text>();
 
         Debug.Log("Starting player script");
 	}
@@ -22,7 +26,14 @@ public class PlayerScript : MonoBehaviour {
         
         HandleInput();
         UpdateCamera();
+        UpdateDebug();
+        
 	}
+
+    public void UpdateDebug()
+    {
+        debugText.text = string.Format("{0}, {1}", gameObject.transform.position.x, gameObject.transform.position.y); 
+    }
 
     private void HandleInput()
     {
@@ -32,6 +43,8 @@ public class PlayerScript : MonoBehaviour {
         var curPos = gameObject.transform.position;
 
         var newPos = new Vector3(curPos.x+x,curPos.y+y);
+        newPos.x = Mathf.Clamp(newPos.x, GameConfig.Left, GameConfig.Right);
+        newPos.y = Mathf.Clamp(newPos.y, GameConfig.Bottom, GameConfig.Top);
 
         gameObject.transform.position = newPos;
 

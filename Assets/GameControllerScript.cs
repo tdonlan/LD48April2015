@@ -39,14 +39,17 @@ public class GameControllerScript : MonoBehaviour {
 
     private void LoadEnemy()
     {
-        GameObject enemyObj = (GameObject)Instantiate(enemyPrefab);
-        enemyObj.transform.position = GameHelper.getRandomPos(r);
+        if (enemyList.Count < GameConfig.maxEnemies)
+        {
+            GameObject enemyObj = (GameObject)Instantiate(enemyPrefab);
+            enemyObj.transform.position = GameHelper.getRandomPos(r);
 
-        var enemyController = enemyObj.GetComponent<EnemyScript>();
-        enemyController.gameController = this;
+            var enemyController = enemyObj.GetComponent<EnemyScript>();
+            enemyController.gameController = this;
 
 
-        enemyList.Add(enemyObj);
+            enemyList.Add(enemyObj);
+        }
     }
 
     private void LoadBullet(Vector3 pos, Vector3 dest)
@@ -55,8 +58,6 @@ public class GameControllerScript : MonoBehaviour {
         var bulletScript = bulletObj.GetComponent<BulletScript>();
         bulletScript.Velocity = dest;
         bulletObj.transform.position = pos;
-            
-
 
         bulletList.Add(bulletObj);
     }
@@ -77,11 +78,13 @@ public class GameControllerScript : MonoBehaviour {
 
     public void DestroyEnemy(GameObject enemy)
     {
+        Destroy(enemy);
         enemyList.Remove(enemy);
     }
 
     public void DestroyBullet(GameObject bullet)
     {
+        Destroy(bullet);
         bulletList.Remove(bullet);
     }
 }

@@ -25,19 +25,16 @@ public class BulletScript : MonoBehaviour {
         
         var curPos = gameObject.transform.position;
 
-
-
         gameObject.transform.position = new Vector3(curPos.x + (Velocity.x * Time.deltaTime * GameConfig.BulletSpeed), curPos.y + (Velocity.y * Time.deltaTime * GameConfig.BulletSpeed));
 
         CheckOffscreen();
-            
-           
+             
 	}
 
     public void CheckOffscreen()
     {
         var curPos = gameObject.transform.position;
-        if(curPos.x > 1000 || curPos.x < -1000 || curPos.y > 1000 || curPos.y < -1000)
+        if(curPos.x > GameConfig.Right || curPos.x < GameConfig.Left || curPos.y > GameConfig.Top || curPos.y < GameConfig.Bottom)
         {
             gameController.DestroyBullet(gameObject);
         }
@@ -47,10 +44,9 @@ public class BulletScript : MonoBehaviour {
     {
         Debug.Log("Bullet HIt: " + other.gameObject.name);
        
-
         switch(other.gameObject.name)
         {
-            case "EnemySprite":
+            case "EnemyPrefab(Clone)":
                 var enemyScript = other.gameObject.GetComponent<EnemyScript>();
                 enemyScript.Hit();
                 gameController.DestroyBullet(gameObject);
@@ -58,7 +54,6 @@ public class BulletScript : MonoBehaviour {
             case "PlayerSprite":
                     break;
             default:
-                    
                     break;
 
         }

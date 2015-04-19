@@ -10,7 +10,7 @@ using UnityEngine;
     {
         public static Vector3 getRandomPos(System.Random r)
         {
-            return new Vector3(r.Next(-500, 500), r.Next(-500, 500), 0);
+            return new Vector3(r.Next(GameConfig.Left,GameConfig.Right), r.Next(GameConfig.Bottom,GameConfig.Top), 0);
 
         }
     }
