@@ -57,6 +57,7 @@ public class GameControllerScript : MonoBehaviour {
         GameObject bulletObj = (GameObject)Instantiate(bulletPrefab);
         var bulletScript = bulletObj.GetComponent<BulletScript>();
         bulletScript.Velocity = dest;
+        bulletScript.gameController = this;
         bulletObj.transform.position = pos;
 
         bulletList.Add(bulletObj);
