@@ -28,7 +28,21 @@ public class EnemyScript : MonoBehaviour {
 
     public void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Enemy HIt");
-        int i = 0;
+         
+        Debug.Log("Enemy HIt: " + other.gameObject.name);
+       
+        switch(other.gameObject.name)
+        {
+            case "PlayerSprite":
+                gameController.playerController.Hit(1);
+                Hit();
+                    break;
+            default:
+                    break;
+
+        }
     }
+
+
+
 }

@@ -9,16 +9,23 @@ public class PlayerScript : MonoBehaviour {
     Text debugText;
  
     Camera mainCamera;
+    Slider healthSlider;
 
     public int maxHP { get; set; }
     public int HP { get; set; }
 
 	// Use this for initialization
 	void Start () {
+
+        this.maxHP = 100;
+        this.HP = this.maxHP; 
+            
         this.gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControllerScript>();
+
 
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         debugText = GameObject.FindGameObjectWithTag("DebugText").GetComponent<Text>();
+        healthSlider = GameObject.FindGameObjectWithTag("HealthSlider").GetComponent<Slider>();
 
         Debug.Log("Starting player script");
 	}
@@ -30,12 +37,18 @@ public class PlayerScript : MonoBehaviour {
         HandleInput();
         UpdateCamera();
         UpdateDebug();
+        UpdateHealthSlider();
         
 	}
 
     public void UpdateDebug()
     {
         debugText.text = string.Format("{0}, {1}", gameObject.transform.position.x, gameObject.transform.position.y); 
+    }
+
+    public void UpdateHealthSlider()
+    {
+        healthSlider.value = (float)HP / (float)maxHP;
     }
 
     private void HandleInput()

@@ -6,6 +6,7 @@ public class GameControllerScript : MonoBehaviour {
 
 
     public GameObject player;
+    public PlayerScript playerController;
     public List<GameObject> enemyList;
     public List<GameObject> bulletList;
     public System.Random r;
@@ -29,6 +30,7 @@ public class GameControllerScript : MonoBehaviour {
     private void InitGameObjects()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        playerController = player.GetComponent<PlayerScript>();
     }
 
     private void InitPrefabs()
@@ -91,6 +93,6 @@ public class GameControllerScript : MonoBehaviour {
 
     public void GameOver()
     {
-
+        Application.LoadLevel(2);
     }
 }
