@@ -61,4 +61,36 @@ public class HarpoonScript : MonoBehaviour {
             gameController.DestroyHarpoon();
         }
     }
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        if (isShooting)
+        {
+
+
+            Debug.Log("Harpoon HIt: " + other.gameObject.name);
+
+            switch (other.gameObject.name)
+            {
+                case "EnemyPrefab(Clone)":
+                    Grab(other.gameObject);
+                    break;
+                default:
+                    break;
+
+            }
+        }
+    }
+
+    private void Grab(GameObject enemy)
+    {
+        this.grabbedGameObject = enemy;
+        enemy.transform.position = gameObject.transform.position;
+        var enemySprite = enemy.GetComponent<SpriteRenderer>();
+        enemySprite.sortingOrder = -1;
+        enemy.transform.SetParent(gameObject.transform);
+
+        var enemyScript = enemy.GetComponent<EnemyScript>();
+        enemyScript.Capture();
+    }
 }

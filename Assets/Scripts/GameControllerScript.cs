@@ -92,7 +92,7 @@ public class GameControllerScript : MonoBehaviour {
 	void Update () {
 	    if(r.Next(1000) > 990)
         {
-            //LoadEnemy();
+            LoadEnemy();
         }
 	}
 
