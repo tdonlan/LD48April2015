@@ -67,7 +67,6 @@ public class HarpoonScript : MonoBehaviour {
         if (isShooting)
         {
 
-
             Debug.Log("Harpoon HIt: " + other.gameObject.name);
 
             switch (other.gameObject.name)
@@ -92,5 +91,7 @@ public class HarpoonScript : MonoBehaviour {
 
         var enemyScript = enemy.GetComponent<EnemyScript>();
         enemyScript.Capture();
+
+        isShooting = false;
     }
 }
