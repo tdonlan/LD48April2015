@@ -29,8 +29,9 @@ public class GameControllerScript : MonoBehaviour {
         enemyList = new List<GameObject>();
         bulletList = new List<GameObject>();
 
-        InitGameObjects();
         InitPrefabs();
+        InitGameObjects();
+       
         
     }
 
@@ -40,6 +41,7 @@ public class GameControllerScript : MonoBehaviour {
         playerController = player.GetComponent<PlayerScript>();
 
         DebugText = GameObject.FindGameObjectWithTag("DebugText").GetComponent<Text>();
+        LoadHarpoon(player.transform.position);
     }
 
     private void InitPrefabs()
@@ -75,16 +77,16 @@ public class GameControllerScript : MonoBehaviour {
         bulletList.Add(bulletObj);
     }
 
-    private void LoadHarpoon(Vector3 pos, Vector3 dest)
+    private void LoadHarpoon(Vector3 pos)
     {
         this.harpoon= (GameObject)Instantiate(harpoonPrefab);
         var harpoonScript = harpoon.GetComponent<HarpoonScript>();
-        harpoonScript.Velocity = dest;
+        harpoonScript.Velocity = new Vector3(0,0,0);
         harpoonScript.maxDistance = GameConfig.HarpoonDist;
         harpoonScript.gameController = this;
+        harpoonScript.harpoonState = HarpoonState.Waiting;
 
         harpoon.transform.position = pos;
-
     }
 
 	
@@ -92,7 +94,7 @@ public class GameControllerScript : MonoBehaviour {
 	void Update () {
 	    if(r.Next(1000) > 990)
         {
-            LoadEnemy();
+           // LoadEnemy();
         }
 	}
 
@@ -108,12 +110,22 @@ public class GameControllerScript : MonoBehaviour {
 
     public void ShootHarpoon(Vector3 pos, Vector3 dest)
     {
-        if(harpoon == null)
-        {
-            LoadHarpoon(pos, dest);
 
-        }
-  
+
+        dest.z = 0;
+        dest = Vector3.Normalize(dest);
+        SetDebugText(dest.ToString());
+        harpoon.GetComponent<HarpoonScript>().Shoot(pos, dest, GameConfig.HarpoonDist);
+
+
+    }
+
+    public void ShootEnemy(GameObject enemy, Vector3 dest)
+    {
+        var enemyScript = enemy.GetComponent<EnemyScript>();
+        enemyScript.enemyState = EnemyState.Shot;
+        enemyScript.Velocity = dest;
+
     }
 
     public void DestroyEnemy(GameObject enemy)

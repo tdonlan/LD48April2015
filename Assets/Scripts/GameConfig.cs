@@ -6,11 +6,11 @@ using System.Text;
 
     class GameConfig
     {
-        public static float PlayerSpeed = 10f;
+        public static float PlayerSpeed = 5f;
         public static float EnemySpeed = 8f;
 
         public static float BulletSpeed = 15f;
-        public static float HarpoonSpeed = 30f;
+        public static float HarpoonSpeed = 15f;
         public static float HarpoonDist = 3f;
 
         public static int Left = -15;

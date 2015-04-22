@@ -10,27 +10,47 @@ public class HarpoonScript : MonoBehaviour {
     public float distance { get; set; }
     public bool grabbed { get; set; }
 
-    public bool isShooting { get; set; }
+    public HarpoonState harpoonState;
+   
 
     public GameObject grabbedGameObject { get; set; }
 
 	// Use this for initialization
 	void Start () {
         this.distance = 0;
-        isShooting = true;
+       
+        this.harpoonState = HarpoonState.Waiting;
 	}
+
+    public void Shoot(Vector3 pos, Vector3 velocity, float maxDist)
+    {
+        if (harpoonState == HarpoonState.Waiting)
+        {
+
+            gameObject.transform.position = pos;
+            this.harpoonState = HarpoonState.Shooting;
+            this.maxDistance = maxDist;
+            this.Velocity = velocity;
+        }
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        if (isShooting)
+        switch (harpoonState)
         {
-            UpdateShooting(Time.deltaTime);
+            case HarpoonState.Waiting:
+                gameObject.transform.position = gameController.player.transform.position;
+                break;
+            case HarpoonState.Shooting:
+                UpdateShooting(Time.deltaTime);
+                break;
+            case HarpoonState.Retrieving:
+                UpdateRetrieving(Time.deltaTime);
+                break;
+            default:
+                break;
         }
-        else
-        {
-           // gameController.DestroyHarpoon();
-            UpdateRetrieving(Time.deltaTime);
-        }
+     
 	}
 
     private void UpdateShooting(float delta)
@@ -40,11 +60,12 @@ public class HarpoonScript : MonoBehaviour {
 
        distance += Mathf.Abs( Velocity.x * Time.deltaTime * GameConfig.HarpoonSpeed) + Mathf.Abs(Velocity.y * Time.deltaTime * GameConfig.HarpoonSpeed);
 
-       gameController.SetDebugText(distance.ToString());
+      
 
         if (distance >= maxDistance)
         {
-            isShooting = false;
+            distance = 0;
+            harpoonState = HarpoonState.Retrieving;
         }
 
     }
@@ -58,13 +79,20 @@ public class HarpoonScript : MonoBehaviour {
 
         if(Vector3.Distance(curPos,dest) < .1)
         {
-            gameController.DestroyHarpoon();
+            if(grabbedGameObject != null)
+            {
+                gameController.playerController.grabbedEnemy = grabbedGameObject;
+                gameController.playerController.playerState = PlayerState.Captive;
+            }
+
+            harpoonState = HarpoonState.Waiting;
+          
         }
     }
 
     public void OnTriggerEnter2D(Collider2D other)
     {
-        if (isShooting)
+        if (harpoonState == HarpoonState.Shooting)
         {
 
             Debug.Log("Harpoon HIt: " + other.gameObject.name);
@@ -92,6 +120,6 @@ public class HarpoonScript : MonoBehaviour {
         var enemyScript = enemy.GetComponent<EnemyScript>();
         enemyScript.Capture();
 
-        isShooting = false;
+        harpoonState = HarpoonState.Retrieving;
     }
 }

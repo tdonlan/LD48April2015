@@ -11,6 +11,10 @@ public class PlayerScript : MonoBehaviour {
     Camera mainCamera;
     Slider healthSlider;
 
+    public PlayerState playerState;
+
+    public GameObject grabbedEnemy;
+
     public int maxHP { get; set; }
     public int HP { get; set; }
 
@@ -18,7 +22,9 @@ public class PlayerScript : MonoBehaviour {
 	void Start () {
 
         this.maxHP = 100;
-        this.HP = this.maxHP; 
+        this.HP = this.maxHP;
+
+        this.playerState = PlayerState.Harpoon;
             
         this.gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControllerScript>();
 
@@ -33,7 +39,6 @@ public class PlayerScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        
         HandleInput(Time.deltaTime);
         UpdateCamera();
         UpdateDebug();
@@ -43,6 +48,8 @@ public class PlayerScript : MonoBehaviour {
 
     public void UpdateDebug()
     {
+        string str = string.Format("Player State: {0}, Grabbed{1}", playerState.ToString(), grabbedEnemy.ToString());
+        Debug.Log(str);
        // debugText.text = string.Format("{0}, {1}", gameObject.transform.position.x, gameObject.transform.position.y); 
     }
 
@@ -80,9 +87,34 @@ public class PlayerScript : MonoBehaviour {
     public void Shoot(Vector3 dest)
     {
         dest = Vector3.Normalize(dest);
-        //gameController.Shoot(gameObject.transform.position, dest);
-        gameController.ShootHarpoon(gameObject.transform.position, dest);
+
+        switch (playerState)
+        {
+            case PlayerState.Harpoon:
+                gameController.ShootHarpoon(gameObject.transform.position, dest);
+                break;
+            case PlayerState.Captive:
+                ShootEnemy(dest);
+                playerState = PlayerState.Harpoon;
+
+                break;
+            default:
+                break;
+        }
+
+
     }
+
+    private void ShootEnemy(Vector3 dest)
+    {
+        if (grabbedEnemy != null)
+        {
+            grabbedEnemy = null;
+            gameController.ShootEnemy(grabbedEnemy, dest);
+        }
+    }
+
+     
 
     public void Hit(int dmg)
     {
