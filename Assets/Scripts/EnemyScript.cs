@@ -7,6 +7,8 @@ public class EnemyScript : MonoBehaviour {
     public GameControllerScript gameController;
     public EnemyState enemyState;
 
+    public EnemyType enemyType;
+
     public Vector2 Velocity;
     public Vector2 Acceleration;
 
@@ -15,7 +17,8 @@ public class EnemyScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        enemyState = EnemyState.Default;
+       // enemyState = EnemyState.Default;
+       // enemyType = EnemyType.Seeker;
 	}
 	
 	// Update is called once per frame
@@ -79,7 +82,6 @@ public class EnemyScript : MonoBehaviour {
 
     public void OnTriggerEnter2D(Collider2D other)
     {
-
         switch(enemyState)
         {
             case EnemyState.Default:
@@ -90,7 +92,6 @@ public class EnemyScript : MonoBehaviour {
                 break;
             default:
                 break;
-
         }
     }
 

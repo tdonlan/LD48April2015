@@ -69,6 +69,24 @@ public class GameControllerScript : MonoBehaviour {
         }
     }
 
+    public void LoadTurnedEnemy(Vector3 pos,  Vector3 dest, EnemyType enemyType)
+    {
+        GameObject enemyObj = (GameObject)Instantiate(enemyPrefab);
+        enemyObj.transform.position = pos + dest;
+
+        var enemySprite = enemyObj.GetComponent<SpriteRenderer>();
+        enemySprite.color = Color.green;
+
+        var enemyController = enemyObj.GetComponent<EnemyScript>();
+        enemyController.gameController = this;
+        enemyController.enemyState = EnemyState.Shot;
+        enemyController.Velocity = dest;
+        enemyController.enemyType = enemyType;
+
+        //add to a game object list
+ 
+    }
+
     private void LoadBullet(Vector3 pos, Vector3 dest)
     {
         GameObject bulletObj = (GameObject)Instantiate(bulletPrefab);
@@ -97,7 +115,7 @@ public class GameControllerScript : MonoBehaviour {
 	void Update () {
 	    if(r.Next(1000) > 990)
         {
-            LoadEnemy();
+            //LoadEnemy();
         }
 
         SetEnemyListText();
@@ -127,6 +145,7 @@ public class GameControllerScript : MonoBehaviour {
 
     }
 
+    //deprecated
     public void ShootEnemy(GameObject enemy, Vector3 dest)
     {
         dest.z = 0;

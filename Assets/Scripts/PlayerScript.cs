@@ -14,8 +14,8 @@ public class PlayerScript : MonoBehaviour {
 
     public PlayerState playerState;
 
-   // public GameObject grabbedEnemy;
-    public List<GameObject> enemyList = new List<GameObject>();
+
+    public List<EnemyType> enemyTypeList = new List<EnemyType>();
 
     public int maxHP { get; set; }
     public int HP { get; set; }
@@ -99,20 +99,23 @@ public class PlayerScript : MonoBehaviour {
 
     public void AddEnemy(GameObject enemy)
     {
-        enemyList.Add(enemy);
+        enemyTypeList.Add(enemy.GetComponent<EnemyScript>().enemyType);
+        Destroy(enemy);
     }
 
     private void ShootEnemy(Vector3 dest)
     {
-        if(enemyList.Count > 0)
+        gameController.LoadTurnedEnemy(gameObject.transform.position, dest, EnemyType.Seeker);
+
+        if (enemyTypeList.Count > 0)
         {
-            var enemy = enemyList[0];
-                enemyList.RemoveAt(0);
-            gameController.ShootEnemy(enemy, dest);
+            var enemytype = enemyTypeList[0];
+            enemyTypeList.RemoveAt(0);
+
+            gameController.LoadTurnedEnemy(gameObject.transform.position, dest, enemytype);
         }
     }
 
-     
 
     public void Hit(int dmg)
     {
@@ -138,9 +141,9 @@ public class PlayerScript : MonoBehaviour {
     public string printEnemyList()
     {
         string retval = "";
-        foreach(var enemy in enemyList)
+        foreach(var enemy in enemyTypeList)
         {
-            retval += string.Format("{0} | ", enemy.name);
+            retval += string.Format("{0} | ", enemy.ToString());
         }
         return retval;
     }

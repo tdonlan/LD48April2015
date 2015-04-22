@@ -19,13 +19,13 @@ public enum HarpoonState
 
     public enum EnemyType
     {
-    Seeker, //kamakazi
-    Shooter, //moves near to the player, shoots bullets
-    Tank // spawns seekers, can't be harpooned
+        Seeker, //kamakazi
+        Shooter, //moves near to the player, shoots bullets
+        Tank // spawns seekers, can't be harpooned
     }
 
-public enum PlayerState
-{
-    Harpoon,
-    Captive
-}
+    public enum PlayerState
+    {
+        Harpoon,
+        Captive
+    }
