@@ -6,8 +6,8 @@ using System.Text;
 
     class GameConfig
     {
-        public static float PlayerSpeed = 5f;
-        public static float EnemySpeed = 8f;
+        public static float PlayerSpeed = 8f;
+        public static float EnemySpeed = 3f;
 
         public static float BulletSpeed = 15f;
         public static float HarpoonSpeed = 15f;

@@ -19,6 +19,8 @@ public class GameControllerScript : MonoBehaviour {
     public GameObject bulletPrefab;
     public GameObject harpoonPrefab;
 
+    public Text EnemyListText;
+
     public Text DebugText;
 
 	// Use this for initialization
@@ -41,6 +43,7 @@ public class GameControllerScript : MonoBehaviour {
         playerController = player.GetComponent<PlayerScript>();
 
         DebugText = GameObject.FindGameObjectWithTag("DebugText").GetComponent<Text>();
+        EnemyListText = GameObject.FindGameObjectWithTag("EnemyList").GetComponent<Text>();
         LoadHarpoon(player.transform.position);
     }
 
@@ -94,13 +97,20 @@ public class GameControllerScript : MonoBehaviour {
 	void Update () {
 	    if(r.Next(1000) > 990)
         {
-           // LoadEnemy();
+            LoadEnemy();
         }
+
+        SetEnemyListText();
 	}
 
     public void SetDebugText(string text)
     {
         DebugText.text = text;
+    }
+
+    public void SetEnemyListText()
+    {
+        EnemyListText.text = playerController.printEnemyList();
     }
 
     public void Shoot(Vector3 pos, Vector3 dest)
@@ -110,22 +120,20 @@ public class GameControllerScript : MonoBehaviour {
 
     public void ShootHarpoon(Vector3 pos, Vector3 dest)
     {
-
-
         dest.z = 0;
         dest = Vector3.Normalize(dest);
         SetDebugText(dest.ToString());
         harpoon.GetComponent<HarpoonScript>().Shoot(pos, dest, GameConfig.HarpoonDist);
 
-
     }
 
     public void ShootEnemy(GameObject enemy, Vector3 dest)
     {
+        dest.z = 0;
+        dest = Vector3.Normalize(dest);
         var enemyScript = enemy.GetComponent<EnemyScript>();
         enemyScript.enemyState = EnemyState.Shot;
         enemyScript.Velocity = dest;
-
     }
 
     public void DestroyEnemy(GameObject enemy)

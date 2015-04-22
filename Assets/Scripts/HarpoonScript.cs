@@ -60,8 +60,6 @@ public class HarpoonScript : MonoBehaviour {
 
        distance += Mathf.Abs( Velocity.x * Time.deltaTime * GameConfig.HarpoonSpeed) + Mathf.Abs(Velocity.y * Time.deltaTime * GameConfig.HarpoonSpeed);
 
-      
-
         if (distance >= maxDistance)
         {
             distance = 0;
@@ -81,8 +79,8 @@ public class HarpoonScript : MonoBehaviour {
         {
             if(grabbedGameObject != null)
             {
-                gameController.playerController.grabbedEnemy = grabbedGameObject;
-                gameController.playerController.playerState = PlayerState.Captive;
+                gameController.playerController.AddEnemy(grabbedGameObject);
+                //gameController.playerController.playerState = PlayerState.Captive;
             }
 
             harpoonState = HarpoonState.Waiting;

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 
 public class PlayerScript : MonoBehaviour {
@@ -13,7 +14,8 @@ public class PlayerScript : MonoBehaviour {
 
     public PlayerState playerState;
 
-    public GameObject grabbedEnemy;
+   // public GameObject grabbedEnemy;
+    public List<GameObject> enemyList = new List<GameObject>();
 
     public int maxHP { get; set; }
     public int HP { get; set; }
@@ -48,8 +50,8 @@ public class PlayerScript : MonoBehaviour {
 
     public void UpdateDebug()
     {
-        string str = string.Format("Player State: {0}, Grabbed{1}", playerState.ToString(), grabbedEnemy.ToString());
-        Debug.Log(str);
+        //string str = string.Format("Player State: {0}, Grabbed{1}", playerState.ToString(), grabbedEnemy.ToString());
+       // Debug.Log(str);
        // debugText.text = string.Format("{0}, {1}", gameObject.transform.position.x, gameObject.transform.position.y); 
     }
 
@@ -74,7 +76,12 @@ public class PlayerScript : MonoBehaviour {
         if(Input.GetMouseButtonDown(0))
         {
             var dest = Camera.main.ScreenToWorldPoint(Input.mousePosition) - gameObject.transform.position;
-            Shoot(dest);
+            ShootHarpoon(dest);
+        }
+        if(Input.GetMouseButton(1))
+        {
+            var dest = Camera.main.ScreenToWorldPoint(Input.mousePosition) - gameObject.transform.position;
+            ShootEnemy(dest);
         }
 
     }
@@ -84,33 +91,24 @@ public class PlayerScript : MonoBehaviour {
         mainCamera.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, mainCamera.transform.position.z);
     }
 
-    public void Shoot(Vector3 dest)
+    public void ShootHarpoon(Vector3 dest)
     {
         dest = Vector3.Normalize(dest);
+        gameController.ShootHarpoon(gameObject.transform.position, dest);
+    }
 
-        switch (playerState)
-        {
-            case PlayerState.Harpoon:
-                gameController.ShootHarpoon(gameObject.transform.position, dest);
-                break;
-            case PlayerState.Captive:
-                ShootEnemy(dest);
-                playerState = PlayerState.Harpoon;
-
-                break;
-            default:
-                break;
-        }
-
-
+    public void AddEnemy(GameObject enemy)
+    {
+        enemyList.Add(enemy);
     }
 
     private void ShootEnemy(Vector3 dest)
     {
-        if (grabbedEnemy != null)
+        if(enemyList.Count > 0)
         {
-            grabbedEnemy = null;
-            gameController.ShootEnemy(grabbedEnemy, dest);
+            var enemy = enemyList[0];
+                enemyList.RemoveAt(0);
+            gameController.ShootEnemy(enemy, dest);
         }
     }
 
@@ -135,5 +133,15 @@ public class PlayerScript : MonoBehaviour {
     public void Die()
     {
         gameController.GameOver();
+    }
+
+    public string printEnemyList()
+    {
+        string retval = "";
+        foreach(var enemy in enemyList)
+        {
+            retval += string.Format("{0} | ", enemy.name);
+        }
+        return retval;
     }
 }
